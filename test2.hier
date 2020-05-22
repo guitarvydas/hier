@@ -1,0 +1,13 @@
+{ expression
+  { ekind
+    ' ekind object
+  } ekind
+  ->. expresson object
+  { nameMap
+     { name
+        @ name GetName
+      } + nameMap
+  } nameMap
+  ->. epression object
+} expression
+
