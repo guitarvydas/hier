@@ -1,0 +1,13 @@
+{ expression
+  { ekind
+    'object'
+  }
+  -> .object
+  { nameMap
+     { name
+        GetName
+      } +
+  }
+  -> .object
+}
+
