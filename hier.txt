@@ -1,7 +1,17 @@
+... type language
+expression = { ekind object }
+ekind = 'true' | 'false' | 'object'
+object = { name fieldMap }
+fieldMap = :map field
+field = { name parameterList }
+parameterList =| nameMap
+nameMap = :map name
+name = :string
+
+... parse self.fn(x) ...
 
 1. 
-{ expression
-}
+{ expression }
 
 2.
 { expression
@@ -90,36 +100,36 @@
 10. deleted
 
 11. add newlines (for my readability)
-{ [expression]
-  { [ekind]
+{ expression
+  { ekind
     'object'
   }
   -> .ekind
-  { [object] 
-    { [name]
+  { object 
+    { name
       GetName
     }
     -> .name
-    { [fieldMap]
-      { [field]
-        { [name]
-	  GetName
-	}
-	-> .name
-       { [nameMap]
-         { [name]
-	   GetName
-	 }+
+    { fieldMap
+      { field
+        { name
+          GetName
+        }
+        -> .name
+       { nameMap
+         { name
+           GetName
+         }+
        }
        -> .parameterList
        } +
-      { [field]
-        { [name]
+      { field
+        { name
         } -> .name
-	{ [nameMap]
+        { nameMap
         }
-	-> .parameterList
-	} +
+        -> .parameterList
+      } +
     } 
     -> .fieldmap
   } 
@@ -127,13 +137,13 @@
 }
 
 12-15 replacements
-{[xxx]  -> $xxx__Newscope
+{xxx  -> $xxx__Newscope
 }       -> $xxx_Output
 -> .yyy -> $yyy_SetField_yyy_from_yyy
 +       -> $xxx__AppendFrom_yyy
 
 12.
-{[xxx]  -> $xxx__Newscope
+{xxx  -> $xxx__Newscope
 
 
 
