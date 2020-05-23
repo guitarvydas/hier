@@ -1,0 +1,39 @@
+  $expression__NewScope                            # {expression
+    $ekind__NewScope                               # {ekind
+      $ekind__SetEnum_object_to_object             # 'object'
+    $ekind__Output                                 # }
+    $expression__SetField_ekind_from_ekind         # ->.ekind
+    $object__NewScope                              # {object
+      $name__NewScope                              # {name
+        $name_GetName                              # GetName
+      $name__Output                                # }
+      $object__SetField_name_from_name             # ->.name
+      $fieldMap__NewScope                          # {fieldMap
+        $field__NewScope                           # {field
+          $name__NewScope                          # {name
+            $name_GetName                          # GetName
+          $name__Output                            # }
+          $field__SetField_name_from_name          # ->.name
+          $nameMap__NewScope                       # {nameMap
+            $name__NewScope                        # {name
+              $name_GetName                        # GetName
+            $name__Output
+            $nameMap__AppendFrom_name              # }+
+          $nameMap__Output                         # }
+          $field__SetField_nameMap_from_nameMap    # ->.parameterList
+        $field__Output
+        $fieldMap__AppendFrom_field                # }+
+        $field__NewScope                           # {field
+          $name__NewScope                          # {name
+          $name__Output                            # }->.name
+          $nameMap__NewScope                       # {nameMap
+          $nameMap__Output                         # }
+          $field__SetField_nameMap_from_nameMap    # ->.parameterList
+        $field__Output
+        $fieldMap__AppendFrom_field                # }+
+      $fieldMap__Output                            # }
+      $object__SetField_fieldMap_from_fieldMap     # ->.fieldmap
+    $object__Output                                # }
+    $expression__SetField_object_from_object       # ->.object
+  $expression__Output                              # }
+                                                   # 
