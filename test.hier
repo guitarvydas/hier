@@ -5,6 +5,7 @@
   -> .object
   { name1
     { name2
+      GetName
     }
     -> name1
   }

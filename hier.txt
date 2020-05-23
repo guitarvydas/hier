@@ -1,37 +1,3 @@
-expression.ekind = 'object'
-
-  {object
-    .name = "self"
-
-    {fieldMap
-    fieldMap}
-
-    .object = ^
-  object}
-  
-expression.object = pop(output-object)
-
-
-{ expression
-  { ekind
-    'object'
-  } -> .ekind
-  { object
-    { name
-      GetName
-    } -> .name
-    { fieldMap
-      { field
-        { name
-	  GetName
-	} -> .name
-        { parameterList
-	} -> .parameterList
-      } +
-    {} +
-    } -> .fieldMap
-  } -> .object
-} expression
 
 1. 
 { expression
@@ -121,18 +87,7 @@ expression.object = pop(output-object)
   } -> .object
 }
 
-%% add [] notation to make scope types stand out (should that be an underline?)
-10.
-{ [expression]
-  { [ekind] 'object' } -> .ekind
-  { [object] 
-    { [name] GetName } -> .name
-    { [fieldMap]
-      { [field]   { [name] GetName } -> .name   { [nameMap] { [name] GetName }+ } -> .parameterList } +
-      { [field]   { [name]         } -> .name   { [nameMap]                     } -> .parameterList } +
-    } -> .fieldMap
-  } -> .object
-}
+10. deleted
 
 11. add newlines (for my readability)
 { [expression]

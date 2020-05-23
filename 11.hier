@@ -17,7 +17,7 @@
        { nameMap
          { name
 	   GetName
-	 } +
+	 }+
        }
        -> .parameterList
        } +
@@ -33,3 +33,4 @@
   } 
   -> .object
 }
+
