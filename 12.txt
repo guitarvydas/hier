@@ -1,0 +1,26 @@
+{ expression
+  { ekind 
+    'object'
+  } -> .ekind
+  { object 
+    { name 
+      GetName
+    } -> .name
+    { fieldMap
+      [ 
+        {field
+	  {name
+	    GetName
+	  } -> .name
+	  {parameterList
+	    [
+	      {name
+	        GetName
+	      }+
+	    ]
+	  } -> .parameterList
+	}+
+      ]
+    } -> .fieldMap
+  } -> .object
+}

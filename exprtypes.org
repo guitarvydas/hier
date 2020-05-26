@@ -1,0 +1,15 @@
+* expression
+** ekind
+*** 'true' | 'false' | 'object'
+** object
+*** name
+**** :string
+*** fieldMap
+**** :map field
+***** field
+****** name
+****** :string
+****** parameterList
+****** nameMap
+******* :map name
+******** :string

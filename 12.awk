@@ -21,7 +21,13 @@ function pcomment(line) {
     line="";
     original=$0;
     gsub(/[ \t]+/,"",$0);
-    if ($0 ~ /{/) {
+    if ($0 ~ /\[/) {
+	ptabs();
+	ix += 1;
+	tystack[ix] = "%map";
+	line = line "$%map__NewScope";
+	indent += 2;
+    } else if ($0 ~ /{/) {
 	ptabs();
 	ix += 1;
 	gsub(/{/,"",$0);
@@ -38,6 +44,12 @@ function pcomment(line) {
 	ptabs();
 	line = line sprintf("$%s__AppendFrom_%s", tystack[ix-1], tystack[ix]);
         ix -= 1;
+    } else if ($0 ~ /]/) {
+	gsub(/}/,"",$0);
+	indent -= 2;
+	ptabs();
+	line = line "$%map__Output";
+	ix -= 1;
     } else if ($0 ~ /}/) {
 	gsub(/}/,"",$0);
 	indent -= 2;
@@ -51,12 +63,12 @@ function pcomment(line) {
     } else if ($0 ~ /'/ ) {
         split($0,val,"'");
 	ptabs();
-	line = line sprintf("$%s__SetEnum_%s_to_%s", tystack[ix], val[2], val[2]);
+	line = line sprintf("$%s__SetEnum_%s", tystack[ix], val[2]);
     } else {
 	ptabs();
 	gsub(/[ \t]/,"",$0);
 	if (length($0) > 0) 
-	    line = line sprintf("$%s_%s", tystack[ix], $0);
+	    line = line sprintf("$%s__%s", tystack[ix], $0);
     }
     pcomment(line);
 }

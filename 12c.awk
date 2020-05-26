@@ -18,11 +18,17 @@ function pcomment(line) {
     line="";
     original=$0;
     gsub(/[ \t]+/,"",$0);
-    if ($0 ~ /{/) {
+    if ($0 ~ /\[/) {
+	ptabs();
+	ix += 1;
+	tystack[ix] = "%map";
+	line = line "NewScope(\"%map\")";
+	indent += 2;
+    } else if ($0 ~ /{/) {
 	ptabs();
 	ix += 1;
 	gsub(/{/,"",$0);
-	tystack[ix] = $0;
+12c.	tystack[ix] = $0;
 	line = line sprintf("NewScope(\"%s\")", tystack[ix]);
 	indent += 2;
     } else if ($0 ~ /}\+/) {
@@ -35,6 +41,12 @@ function pcomment(line) {
 	ptabs();
 	line = line sprintf("AppendFrom(\"%s\",\"%s\")", tystack[ix-1], tystack[ix]);
         ix -= 1;
+    } else if ($0 ~ /]/) {
+	gsub(/}/,"",$0);
+	indent -= 2;
+	ptabs();
+	line = line "Output(\"%map\")";
+	ix -= 1;
     } else if ($0 ~ /}/) {
 	gsub(/}/,"",$0);
 	indent -= 2;

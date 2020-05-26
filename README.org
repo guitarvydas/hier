@@ -1,0 +1,3 @@
+* build 12a.txt
+   awk -f 12.awk <11.hier >12a.txt
+> then manually edit to make Lisp

@@ -4,8 +4,7 @@ ekind = 'true' | 'false' | 'object'
 object = { name fieldMap }
 fieldMap = :map field
 field = { name parameterList }
-parameterList =| nameMap
-nameMap = :map name
+parameterList = :map name
 name = :string
 
 ... parse self.fn(x) ...
@@ -29,11 +28,8 @@ name = :string
 { expression
   { ekind 'object' } -> .ekind
   { object 
-    { name GetName } -> .name
-    { fieldMap
-      {} +
-      {} +
-    } -> .fieldMap
+    { name GetName="self" } -> .name
+    { fieldMap [] } ->.fieldMap
   } -> .object
 }
 
@@ -41,10 +37,222 @@ name = :string
 { expression
   { ekind 'object' } -> .ekind
   { object 
+    { name GetName="self" } -> .name
+    { fieldMap [ {field} ] } ->.fieldMap
+  } -> .object
+}
+
+
+6.
+{ expression
+  { ekind 'object' } -> .ekind
+  { object 
+    { name GetName="self" } -> .name
+    { fieldMap [ {field {}->.name {}->.parameterList} ] } ->.fieldMap
+  } -> .object
+}
+
+7.
+{ expression
+  { ekind 'object' } -> .ekind
+  { object 
+    { name GetName="self" } -> .name
+    { fieldMap
+      [ 
+        {field {}->.name {}->.parameterList}+
+      ]
+    } ->.fieldMap
+  } -> .object
+}
+
+8.
+{ expression
+  { ekind 'object' } -> .ekind
+  { object 
+    { name GetName="self" } -> .name
+    { fieldMap
+      [ 
+        {field
+	  {}->.name
+	  {}->.parameterList
+	}+
+      ]
+    } ->.fieldMap
+  } -> .object
+}
+
+9.
+{ expression
+  { ekind 'object' } -> .ekind
+  { object 
+    { name GetName="self" } -> .name
+    { fieldMap
+      [ 
+        {field
+	  {name GetName="fn"}->.name
+	  {[]}->.parameterList
+	}+
+      ]
+    } ->.fieldMap
+  } -> .object
+}
+
+10.
+{ expression
+  { ekind 'object' } -> .ekind
+  { object 
+    { name GetName="self" } -> .name
+    { fieldMap
+      [ 
+        {field
+	  {name GetName="fn"}->.name
+	  {
+	    [
+	     {name GetName="x"}+
+	    ]
+	  }->.parameterList
+	}+
+      ]
+    } ->.fieldMap
+  } -> .object
+}
+
+11.
+{ expression
+  { ekind 'object' } -> .ekind
+  { object 
+    { name GetName="self" } -> .name
+    { fieldMap
+      [ 
+        {field
+	  {name GetName="fn"}->.name
+	  {
+	    [
+	     {name GetName="x"}+
+	    ]
+	  }->.parameterList
+	}+
+      ]
+    } ->.fieldMap
+  } -> .object
+}
+12.
+{ expression
+  { ekind
+    'object'
+  } -> .ekind
+  { object 
+    { name
+      GetName="self"
+    } -> .name
+    { fieldMap
+      [ 
+        {field
+	  {name
+	    GetName="fn"
+	  } -> .name
+	  {
+	    [
+	     {name 
+               GetName="x"
+	     }+
+	    ]
+	  } -> .parameterList
+	}+
+      ]
+    } -> .fieldMap
+  } -> .object
+}
+
+
+
+
+
+
+
+11.
+{ expression
+  { ekind 'object' } -> .ekind
+  { object 
+    { name GetName="self" } -> .name
+    { fieldMap
+      [ 
+        {field
+	  {name GetName="fn"}->.name
+	  {
+	    [
+	      {name GetName="x"}+
+	    ]
+	  }->.parameterList
+	}+
+      ]
+    } ->.fieldMap
+  } -> .object
+}
+
+12.
+{ expression
+  { ekind 
+    'object'
+  } -> .ekind
+  { object 
+    { name 
+      GetName
+    } -> .name
+    { fieldMap
+      [ 
+        {field
+	  {name
+	    GetName
+	  } -> .name
+	  {parameterList
+	    [
+	      {name
+	        GetName
+	      }+
+	    ]
+	  } -> .parameterList
+	}+
+      ]
+    } -> .fieldMap
+  } -> .object
+}
+
+
+
+
+
+
+
+
+
+
+5.
+{ expression
+  { ekind 'object' } -> .ekind
+  { object 
+    { name GetName="self" } -> .name
+    { fieldMap
+      [
+        {} +
+      ]
+    } -> .fieldMap
+  } -> .object
+}
+
+
+
+
+5.
+{ expression
+  { ekind 'object' } -> .ekind
+  { object 
     { name GetName } -> .name
     { fieldMap
-      { field } +
-      { field } +
+      [
+        { field } +
+        { field } +
+      ]
     } -> .fieldMap
   } -> .object
 }
@@ -55,8 +263,10 @@ name = :string
   { object 
     { name GetName } -> .name
     { fieldMap
-      { field   {} -> .name   {} -> .parameterList } +
-      { field   {} -> .name   {} -> .parameterList } +
+      [
+        { field   {} -> .name   {} -> .parameterList } +
+        { field   {} -> .name   {} -> .parameterList } +
+      ]
     } -> .fieldMap
   } -> .object
 }
@@ -67,8 +277,24 @@ name = :string
   { object 
     { name GetName } -> .name
     { fieldMap
-      { field   { name GetName }-> .name   { nameMap {}= } -> .parameterList } +
-      { field   { name         }-> .name   { nameMap {}= } -> .parameterList } +
+      [
+        { field   {} -> .name   {[]} -> .parameterList } +
+        { field   {} -> .name   {[]} -> .parameterList } +
+      ]
+    } -> .fieldMap
+  } -> .object
+}
+
+7.
+{ expression
+  { ekind 'object' } -> .ekind
+  { object 
+    { name GetName } -> .name
+    { fieldMap
+      [
+        { field   { name GetName }-> .name   {[ name ]} -> .parameterList } +
+        { field   { name         }-> .name   {[ name]} -> .parameterList } +
+      ]
     } -> .fieldMap
   } -> .object
 }
@@ -79,8 +305,10 @@ name = :string
   { object 
     { name GetName } -> .name
     { fieldMap
-      { field   { name GetName } -> .name   { nameMap {}+ } -> .parameterList } +
-      { field   { name         } -> .name   { nameMap     } -> .parameterList } +
+      [
+        { field   { name GetName } -> .name   { nameMap {}+ } -> .parameterList } +
+        { field   { name         } -> .name   { nameMap     } -> .parameterList } +
+      ]
     } -> .fieldMap
   } -> .object
 }
@@ -91,8 +319,10 @@ name = :string
   { object 
     { name GetName } -> .name
     { fieldMap
-      { field   { name GetName } -> .name   { nameMap { name GetName }+ } -> .parameterList } +
-      { field   { name         } -> .name   { nameMap                   } -> .parameterList } +
+      [
+	{ field   { name GetName } -> .name   { nameMap { name GetName }+ } -> .parameterList } +
+	{ field   { name         } -> .name   { nameMap                   } -> .parameterL      ]
+ist } +
     } -> .fieldMap
   } -> .object
 }
@@ -111,25 +341,27 @@ name = :string
     }
     -> .name
     { fieldMap
-      { field
-        { name
-          GetName
-        }
-        -> .name
-       { nameMap
-         { name
-           GetName
-         }+
-       }
-       -> .parameterList
-       } +
-      { field
-        { name
-        } -> .name
-        { nameMap
-        }
-        -> .parameterList
-      } +
+      [
+	{ field
+	  { name
+	    GetName
+	  }
+	  -> .name
+	 { nameMap
+	   { name
+	     GetName
+	   }+
+	 }
+	 -> .parameterList
+	 } +
+	{ field
+	  { name
+	  } -> .name
+	  { nameMap
+	  }
+	  -> .parameterList
+	} +
+      ]
     } 
     -> .fieldmap
   } 
