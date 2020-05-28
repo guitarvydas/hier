@@ -1,28 +1,32 @@
   $expression__NewScope                            # {expression
     $ekind__NewScope                               # {ekind
       $ekind__SetEnum_object                       # 'object'
-    $ekind__Output                                 # }->.ekind
+    $ekind__Output                                 # }
+    $expression__SetField_ekind_from_ekind         # ->.ekind
     $object__NewScope                              # {object
       $name__NewScope                              # {name
         $name__GetName                             # GetName
-      $name__Output                                # }->.name
+      $name__Output                                # }
+      $object__SetField_name_from_name             # ->.name
       $fieldMap__NewScope                          # {fieldMap
-        $%map__NewScope                            # [
-          $field__NewScope                         # {field
+        $field__NewScope                           # {field
+          $name__NewScope                          # {name
+            $name__GetName                         # GetName
+          $name__Output                            # }
+          $field__SetField_name_from_name          # ->.name
+          $parameterList__NewScope                 # {parameterList
             $name__NewScope                        # {name
               $name__GetName                       # GetName
-            $name__Output                          # }->.name
-            $parameterList__NewScope               # {parameterList
-              $%map__NewScope                      # [
-                $name__NewScope                    # {name
-                  $name__GetName                   # GetName
-                $name__Output
-                $%map__AppendFrom_name             # }+
-              $%map__Output                        # ]
-            $parameterList__Output                 # }->.parameterList
-          $field__Output
-          $%map__AppendFrom_field                  # }+
-        $%map__Output                              # ]
-      $fieldMap__Output                            # }->.fieldMap
-    $object__Output                                # }->.object
+            $name__Output
+            $parameterList__AppendFrom_name        # }+
+          $parameterList__Output                   # }
+          $field__SetField_parameterList_from_parameterList # ->.parameterList
+        $field__Output
+        $fieldMap__AppendFrom_field                # }+
+      $fieldMap__Output                            # }
+      $object__SetField_fieldMap_from_fieldMap     # ->.fieldMap
+    $object__Output                                # }
+    $expression__SetField_object_from_object       # ->.object
   $expression__Output                              # }
+                                                   # 
+                                                   # 

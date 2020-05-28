@@ -28,7 +28,7 @@ function pcomment(line) {
 	ptabs();
 	ix += 1;
 	gsub(/{/,"",$0);
-12c.	tystack[ix] = $0;
+	tystack[ix] = $0;
 	line = line sprintf("NewScope(\"%s\")", tystack[ix]);
 	indent += 2;
     } else if ($0 ~ /}\+/) {

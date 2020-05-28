@@ -29,7 +29,7 @@ name = :string
   { ekind 'object' } -> .ekind
   { object 
     { name GetName="self" } -> .name
-    { fieldMap [] } ->.fieldMap
+    { fieldMap } ->.fieldMap
   } -> .object
 }
 
@@ -38,7 +38,7 @@ name = :string
   { ekind 'object' } -> .ekind
   { object 
     { name GetName="self" } -> .name
-    { fieldMap [ {field} ] } ->.fieldMap
+    { fieldMap {field} } ->.fieldMap
   } -> .object
 }
 
@@ -48,7 +48,7 @@ name = :string
   { ekind 'object' } -> .ekind
   { object 
     { name GetName="self" } -> .name
-    { fieldMap [ {field {}->.name {}->.parameterList} ] } ->.fieldMap
+    { fieldMap {field {}->.name {}->.parameterList}+  } ->.fieldMap
   } -> .object
 }
 
@@ -57,11 +57,7 @@ name = :string
   { ekind 'object' } -> .ekind
   { object 
     { name GetName="self" } -> .name
-    { fieldMap
-      [ 
-        {field {}->.name {}->.parameterList}+
-      ]
-    } ->.fieldMap
+    { fieldMap {field {name}->.name {parameterList}->.parameterList}+  } ->.fieldMap
   } -> .object
 }
 
@@ -70,14 +66,7 @@ name = :string
   { ekind 'object' } -> .ekind
   { object 
     { name GetName="self" } -> .name
-    { fieldMap
-      [ 
-        {field
-	  {}->.name
-	  {}->.parameterList
-	}+
-      ]
-    } ->.fieldMap
+    { fieldMap {field {name}->.name {parameterList {}+ }->.parameterList}+  } ->.fieldMap
   } -> .object
 }
 
@@ -86,14 +75,7 @@ name = :string
   { ekind 'object' } -> .ekind
   { object 
     { name GetName="self" } -> .name
-    { fieldMap
-      [ 
-        {field
-	  {name GetName="fn"}->.name
-	  {[]}->.parameterList
-	}+
-      ]
-    } ->.fieldMap
+    { fieldMap { field { name }->.name { parameterList {name}+ }->.parameterList}+  } ->.fieldMap
   } -> .object
 }
 
@@ -102,234 +84,42 @@ name = :string
   { ekind 'object' } -> .ekind
   { object 
     { name GetName="self" } -> .name
-    { fieldMap
-      [ 
-        {field
-	  {name GetName="fn"}->.name
-	  {
-	    [
-	     {name GetName="x"}+
-	    ]
-	  }->.parameterList
-	}+
-      ]
-    } ->.fieldMap
+    { fieldMap { field { name GetName="fn" }->.name { parameterList { name GetName="x" }+ }->.parameterList}+  } ->.fieldMap
   } -> .object
 }
 
-11.
-{ expression
-  { ekind 'object' } -> .ekind
-  { object 
-    { name GetName="self" } -> .name
-    { fieldMap
-      [ 
-        {field
-	  {name GetName="fn"}->.name
-	  {
-	    [
-	     {name GetName="x"}+
-	    ]
-	  }->.parameterList
-	}+
-      ]
-    } ->.fieldMap
-  } -> .object
-}
-12.
+10.
 { expression
   { ekind
     'object'
-  } -> .ekind
+  } //ekind
+  -> .ekind
   { object 
     { name
-      GetName="self"
-    } -> .name
+      GetName
+    } //name
+    -> .name
     { fieldMap
-      [ 
-        {field
-	  {name
-	    GetName="fn"
-	  } -> .name
-	  {
-	    [
-	     {name 
-               GetName="x"
-	     }+
-	    ]
-	  } -> .parameterList
-	}+
-      ]
-    } -> .fieldMap
-  } -> .object
+      { field
+        { name
+	  GetName
+	} //name
+	->.name
+	{ parameterList
+	  { name
+	    GetName
+	  }+
+	} //parameterList
+	->.parameterList
+      }+
+    } //fieldMap
+    ->.fieldMap
+  } // object
+  -> .object
 }
-
-
-
-
-
 
 
 11.
-{ expression
-  { ekind 'object' } -> .ekind
-  { object 
-    { name GetName="self" } -> .name
-    { fieldMap
-      [ 
-        {field
-	  {name GetName="fn"}->.name
-	  {
-	    [
-	      {name GetName="x"}+
-	    ]
-	  }->.parameterList
-	}+
-      ]
-    } ->.fieldMap
-  } -> .object
-}
-
-12.
-{ expression
-  { ekind 
-    'object'
-  } -> .ekind
-  { object 
-    { name 
-      GetName
-    } -> .name
-    { fieldMap
-      [ 
-        {field
-	  {name
-	    GetName
-	  } -> .name
-	  {parameterList
-	    [
-	      {name
-	        GetName
-	      }+
-	    ]
-	  } -> .parameterList
-	}+
-      ]
-    } -> .fieldMap
-  } -> .object
-}
-
-
-
-
-
-
-
-
-
-
-5.
-{ expression
-  { ekind 'object' } -> .ekind
-  { object 
-    { name GetName="self" } -> .name
-    { fieldMap
-      [
-        {} +
-      ]
-    } -> .fieldMap
-  } -> .object
-}
-
-
-
-
-5.
-{ expression
-  { ekind 'object' } -> .ekind
-  { object 
-    { name GetName } -> .name
-    { fieldMap
-      [
-        { field } +
-        { field } +
-      ]
-    } -> .fieldMap
-  } -> .object
-}
-
-6.
-{ expression
-  { ekind 'object' } -> .ekind
-  { object 
-    { name GetName } -> .name
-    { fieldMap
-      [
-        { field   {} -> .name   {} -> .parameterList } +
-        { field   {} -> .name   {} -> .parameterList } +
-      ]
-    } -> .fieldMap
-  } -> .object
-}
-
-7.
-{ expression
-  { ekind 'object' } -> .ekind
-  { object 
-    { name GetName } -> .name
-    { fieldMap
-      [
-        { field   {} -> .name   {[]} -> .parameterList } +
-        { field   {} -> .name   {[]} -> .parameterList } +
-      ]
-    } -> .fieldMap
-  } -> .object
-}
-
-7.
-{ expression
-  { ekind 'object' } -> .ekind
-  { object 
-    { name GetName } -> .name
-    { fieldMap
-      [
-        { field   { name GetName }-> .name   {[ name ]} -> .parameterList } +
-        { field   { name         }-> .name   {[ name]} -> .parameterList } +
-      ]
-    } -> .fieldMap
-  } -> .object
-}
-
-8.
-{ expression
-  { ekind 'object' } -> .ekind
-  { object 
-    { name GetName } -> .name
-    { fieldMap
-      [
-        { field   { name GetName } -> .name   { nameMap {}+ } -> .parameterList } +
-        { field   { name         } -> .name   { nameMap     } -> .parameterList } +
-      ]
-    } -> .fieldMap
-  } -> .object
-}
-
-9.
-{ expression
-  { ekind 'object' } -> .ekind
-  { object 
-    { name GetName } -> .name
-    { fieldMap
-      [
-	{ field   { name GetName } -> .name   { nameMap { name GetName }+ } -> .parameterList } +
-	{ field   { name         } -> .name   { nameMap                   } -> .parameterL      ]
-ist } +
-    } -> .fieldMap
-  } -> .object
-}
-
-10. deleted
-
-11. add newlines (for my readability)
 { expression
   { ekind
     'object'
@@ -341,42 +131,22 @@ ist } +
     }
     -> .name
     { fieldMap
-      [
-	{ field
+      { field
+        { name
+	  GetName
+	}
+	->.name
+	{ parameterList
 	  { name
 	    GetName
-	  }
-	  -> .name
-	 { nameMap
-	   { name
-	     GetName
-	   }+
-	 }
-	 -> .parameterList
-	 } +
-	{ field
-	  { name
-	  } -> .name
-	  { nameMap
-	  }
-	  -> .parameterList
-	} +
-      ]
-    } 
-    -> .fieldmap
-  } 
+	  }+
+	}
+	->.parameterList
+      }+
+    }
+    ->.fieldMap
+  }
   -> .object
 }
-
-12-15 replacements
-{xxx  -> $xxx__Newscope
-}       -> $xxx_Output
--> .yyy -> $yyy_SetField_yyy_from_yyy
-+       -> $xxx__AppendFrom_yyy
-
-12.
-{xxx  -> $xxx__Newscope
-
-
 
 
